@@ -1,20 +1,27 @@
 <%- include('../includes/head.ejs') %>
-    </head>
 
-    <body>
-        <%- include('../includes/navigation.ejs') %>
+<body>
 
-            <main>
-                <% if (imgs.length > 0) { %>
-                    <div>
+    <%- include('../includes/navigation.ejs') %>
+
+    <div class="container">
+        <div class="album py-5">
+            <div class="container">
+                <div class="row">
+                    <% if (imgs.length > 0) { %>
                         <% for (let image of imgs) { %>
-                            <div>
-                                <img src="/<%= image.imageUrl %>" alt="">
+                            <div class="col-md-4">
+                                <div class="card mb-4 shadow-sm">
+                                    <img class="card-img-top rounded" src="/<%= image.imageUrl %>" alt="<%= image.imageName %>">
+                                </div>
                             </div>
                         <% } %>
-                    </div>
                     <% } else { %>
-                        <h1>No Images found!</h1>
+                        <h1 >No Images found!</h1>
                     <% } %>
-            </main>
-            <%- include('../includes/footer.ejs') %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../includes/footer.ejs') %>

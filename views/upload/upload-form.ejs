@@ -1,32 +1,32 @@
 <%- include('../includes/head.ejs') %>
-    </head>
 
-    <body>
-        <%- include('../includes/navigation.ejs') %>
+<body class="text-center">
 
-            <main>
-                <form action="/upload-by-url" method="POST">
-                    <div>
+    <%- include('../includes/navigation.ejs') %>
+
+    <div class="container">
+        <div class="row justify-content-center margin">
+            <div class="col-md-6">
+                <form class="form-block" action="/upload-by-url" method="POST">
+                    <div class="card-body">
                         <label for="imageURL">Upload by URL</label>
-                        <input 
-                            type="text"
-                            name="imageURL" 
-                            id="imageURL"
-                            required>
+                        <input type="text" class="form-control" name="imageURL" id="imageURL" required>
                     </div>
-                    <button class="btn" type="submit">Upload</button>
+                    <button class="btn btn-dark" type="submit">Upload</button>
                 </form>
-
-                <form action="/upload-manualy" method="POST" enctype="multipart/form-data">
-                    <div>
+            </div>
+        </div>
+        <div class="row justify-content-center margin">
+                <div class="col-md-6">
+                <form class="form-block" action="/upload-manualy" method="POST" enctype="multipart/form-data">
+                    <div class="card-body">
                         <label for="imageFile">Manual Upload</label>
-                        <input 
-                            type="file"
-                            name="imageFile" 
-                            id="imageFile"
-                            required>
+                        <input type="file" class="form-control-file" name="imageFile" id="imageFile" required>
                     </div>
-                    <button class="btn" type="submit">Upload</button>
+                    <button class="btn btn-dark" type="submit">Upload</button>
                 </form>
-            </main>
-            <%- include('../includes/footer.ejs') %>
+            </div>
+        </div>
+    </div>
+    
+    <%- include('../includes/footer.ejs') %>

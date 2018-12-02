@@ -55,7 +55,7 @@ mongoose
   .connect(
     'mongodb+srv://Admin:Xloprtnm1987@cluster0-4nxjx.mongodb.net/gallery'
   )
-  .then(result => {
+  .then(() => {
     app.listen(3000);
   })
   .catch(err => {
