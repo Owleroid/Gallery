@@ -1,0 +1,32 @@
+<%- include('../includes/head.ejs') %>
+    </head>
+
+    <body>
+        <%- include('../includes/navigation.ejs') %>
+
+            <main>
+                <form action="/upload-by-url" method="POST">
+                    <div>
+                        <label for="imageURL">Upload by URL</label>
+                        <input 
+                            type="text"
+                            name="imageURL" 
+                            id="imageURL"
+                            required>
+                    </div>
+                    <button class="btn" type="submit">Upload</button>
+                </form>
+
+                <form action="/upload-manualy" method="POST" enctype="multipart/form-data">
+                    <div>
+                        <label for="imageFile">Manual Upload</label>
+                        <input 
+                            type="file"
+                            name="imageFile" 
+                            id="imageFile"
+                            required>
+                    </div>
+                    <button class="btn" type="submit">Upload</button>
+                </form>
+            </main>
+            <%- include('../includes/footer.ejs') %>
