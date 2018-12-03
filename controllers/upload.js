@@ -19,7 +19,7 @@ exports.postUploadImageUrl = (req, res, next) => {
 
     const options = {
         url: imgAddress,
-        dest: './images/original'
+        dest: './images/tmp'
     };
 
     if (!(imgAddress.endsWith('.jpg') ||
@@ -37,16 +37,16 @@ exports.postUploadImageUrl = (req, res, next) => {
             image
         }) => {
             console.log('File saved to: ', filename);
-            sharp(`./images/original/${imgName}`)
+            return sharp(`./images/tmp/${imgName}`)
                 .resize(300, null)
                 .toFile(`./images/${imgName}`)
                 .then(() => console.log('Resized'))
                 .catch(err => console.log('Sharp error: ' + err));
         })
         .then(() => {
-            // let stats = fs.statSync(`./images/${imgName}`);
-            // let fileSizeInBytes = stats.size;
-            // imgSize = fileSizeInBytes;
+            let stats = fs.statSync(`./images/${imgName}`);
+            let fileSizeInBytes = stats.size;
+            imgSize = fileSizeInBytes;
             console.log('Size: ' + imgSize);
             const image = new Image({
                 imageName: imgName,
@@ -57,6 +57,7 @@ exports.postUploadImageUrl = (req, res, next) => {
             image.save()
                 .then(() => {
                     res.redirect('/gallery');
+                    fs.unlink(`./images/tmp/${imgName}`, (err) => console.log(err));
                 })
                 .catch(err => {
                     console.log(err);
@@ -67,12 +68,11 @@ exports.postUploadImageUrl = (req, res, next) => {
         });
 };
 
-// For this moment, only uploads to local storage without resizing. Stuck with async in node.js
 exports.postUploadImageFile = (req, res, next) => {
     const img = req.file;
     const imgName = req.file.filename;
-    const imgSize = req.file.size;
-    const date = new Date().toISOString().split('T')[0];;
+    const date = new Date().toISOString().split('T')[0];
+    var imgSize = 0;
 
     if (!img) {
         return res.render('upload/upload-form', {
@@ -81,19 +81,31 @@ exports.postUploadImageFile = (req, res, next) => {
         });
     }
 
-    const imageUrl = img.path;
-
-    const image = new Image({
-        imageName: imgName,
-        imageSize: imgSize,
-        imageUrl: imageUrl,
-        uploadDate: date
-    });
-    image.save()
+    sharp(`./images/tmp/${imgName}`)
+        .resize(300, null)
+        .toFile(`./images/${imgName}`)
         .then(() => {
-            res.redirect('/gallery');
+            return console.log('Resized');
         })
-        .catch(err => {
-            console.log(err);
-        });
+        .then(() => {
+            let stats = fs.statSync(`./images/${imgName}`);
+            let fileSizeInBytes = stats.size;
+            imgSize = fileSizeInBytes;
+            console.log('Size: ' + imgSize);
+            const image = new Image({
+                imageName: imgName,
+                imageSize: imgSize,
+                imageUrl: `images/${imgName}`,
+                uploadDate: date
+            });
+            image.save()
+                .then(() => {
+                    res.redirect('/gallery');
+                    fs.unlink(`./images/tmp/${imgName}`, (err) => console.log(err));
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        })
+        .catch(err => console.log('Sharp error: ' + err));
 };
